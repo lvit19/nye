@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma surpresa para Frany Nyê</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #fce4ec; /* Rosa bem clarinho */
+            color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #c2185b; /* Rosa um pouco mais escuro */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        button {
+            background-color: #c2185b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background-color: #ad1457;
+            transform: scale(1.05);
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .final-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #c2185b;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        #player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="step active" id="step0">
+            <h1>Olá, meu amor!</h1>
+            <p>Preparei uma coisinha pra você...</p>
+            <button onclick="nextStep()">Começar</button>
+        </div>
+        <div class="step" id="step1">
+            <p>Mo, liga o bluetooth</p>
+            <button onclick="nextStep()">Feito!</button>
+        </div>
+        <div class="step" id="step2">
+            <p>Conecta na Alexa</p>
+            <button onclick="nextStep()">Conectado!</button>
+        </div>
+        <div class="step" id="step3">
+            <p>Coloque um volume confortavel.</p>
+            <button onclick="nextStep()">Prontinho!</button>
+        </div>
+        <div class="step" id="step4">
+            <h1>Aproveite...</h1>
+            <button onclick="nextStep()">❤️</button>
+        </div>
+        <div class="step" id="step5">
+            <p class="final-message">Eu te amo!</p>
+        </div>
+    </div>
+
+    <!-- Player do YouTube escondido -->
+    <div id="player"></div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 5;
+        
+        function nextStep() {
+            if (currentStep <= totalSteps) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep++;
+                if (document.getElementById('step' + currentStep)) {
+                    document.getElementById('step' + currentStep).classList.add('active');
+                }
+            }
+            
+            // Inicia a música no passo 4 ("Aproveite...")
+            if (currentStep === 4) {
+                player.playVideo();
+            }
+        }
+
+        // Carrega a API do IFrame Player do YouTube de forma assíncrona.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Esta função cria um <iframe> (e o player do YouTube)
+        // depois que o código da API é baixado.
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '1',
+                width: '1',
+                videoId: 'MWh78SM5G7k', // ID do vídeo Djavan - Oceano
+                playerVars: {
+                    'autoplay': 0, // Autoplay desligado inicialmente
+                    'controls': 0,
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'loop': 1,
+                    'playlist': 'MWh78SM5G7k', // Necessário para o loop funcionar
+                    'fs': 0,
+                    'cc_load_policy': 0,
+                    'iv_load_policy': 3,
+                    'autohide': 0
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        // A API chamará esta função quando o player de vídeo estiver pronto.
+        function onPlayerReady(event) {
+            // O vídeo não vai tocar automaticamente aqui, mas estará pronto.
+        }
+    </script>
+</body>
+</html>
